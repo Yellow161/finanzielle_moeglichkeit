@@ -62,7 +62,6 @@ flutter run --dart-define=API_KEY=0ZShFcccONpjFyYyKwqPLVBaR3TmTVIYBVotDxZh8L3AGS
 ```
 # Trigger CI
 Test Commit um Workflow auszuführen
-# Trigger CI
-Test Commit um Workflow auszuführen
+
 
 
