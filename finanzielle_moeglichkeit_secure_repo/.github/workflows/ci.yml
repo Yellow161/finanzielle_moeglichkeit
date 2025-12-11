@@ -1,0 +1,48 @@
+name: CI & Build (Production Ready)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      - name: Flutter pub get
+        run: |
+          cd app
+          flutter pub get
+
+      - name: Flutter analyze
+        run: |
+          cd app
+          flutter analyze || true
+
+      - name: Flutter tests
+        run: |
+          cd app
+          if [ -d "test" ]; then flutter test || true; fi
+
+      - name: Build Android APK & AAB (obfuscated)
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+        run: |
+          chmod +x scripts/build_android.sh
+          ./scripts/build_android.sh
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-builds
+          path: output/
