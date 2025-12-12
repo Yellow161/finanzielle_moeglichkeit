@@ -2,7 +2,7 @@ name: CI & Build (Production Ready)
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
 
 jobs:
@@ -16,24 +16,24 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          flutter-version: stable
 
-      - name: Flutter pub get
+      - name: Install dependencies
         run: |
           cd app
           flutter pub get
 
-      - name: Flutter analyze
+      - name: Analyze
         run: |
           cd app
           flutter analyze || true
 
-      - name: Flutter tests
+      - name: Run tests
         run: |
           cd app
           if [ -d "test" ]; then flutter test || true; fi
 
-      - name: Build Android APK & AAB (obfuscated)
+      - name: Build Android APK & AAB
         env:
           API_KEY: ${{ secrets.API_KEY }}
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
@@ -46,3 +46,6 @@ jobs:
         with:
           name: android-builds
           path: output/
+
+
+      
